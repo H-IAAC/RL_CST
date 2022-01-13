@@ -3,15 +3,19 @@ import java.util.HashMap;
 
 public abstract class Environment {
     private int numDim;
-    private Domain numActions;
+    // (min value, max value, type: 0 - Discrete, 1 - Continuous)
+    private Domain actionSpace[];
     private boolean displayGame;
+    // faz sentido ter codelets?
     private ArrayList codelets;
+    // faz sentido NAO ter memoryObjects?
     private ArrayList memoryObjects;
+    // o espaco de observacao nao seria o próprio conjunto de dados acessados pelso objetos de memória?
     private ArrayList<Domain> observationSpace;
 
-    public Environment(int numDim, Domain numActions, boolean displayGame) { // Codelets codelets, MemoryObjects memoryObjects)
+    public Environment(int numDim, Domain actionSpace[], boolean displayGame) { // Codelets codelets, MemoryObjects memoryObjects)
         this.numDim = numDim;
-        this.numActions = numActions;
+        this.actionSpace = actionSpace;
         this.displayGame = displayGame;
         // this.codelets = codelets;
         // this.memoryObjects = memoryObject;
@@ -21,8 +25,8 @@ public abstract class Environment {
         return this.observationSpace;
     }
 
-    public Domain getActionSpace() {
-        return this.numActions;
+    public Domain[] getActionSpace() {
+        return this.actionSpace;
     }
 
     // extract information of Codelets to update enviroment.
@@ -34,8 +38,8 @@ public abstract class Environment {
     // returns the new observation space at the end of the function.
     public abstract ArrayList<Domain> reset();
 
-    // returns {observationSpace : ArrayList<Domain>, reward : int, done : boolean, info : String}
-    public abstract ArrayList step(int idAction);
+    // returns {observationSpace : ArrayList<Domain>, reward : Double, done : boolean, info : String}
+    public abstract ArrayList step(Domain action);
 
     // depending of your problem, you might want to display your environment.
     public abstract void render();

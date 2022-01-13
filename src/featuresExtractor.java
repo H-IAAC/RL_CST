@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class featuresExtractor {
+public abstract class featuresExtractor {
     public LinkedHashMap<String, Double> getFeatures(ArrayList<Domain> state, Integer action) {
         LinkedHashMap<String, Double> f = new LinkedHashMap<String, Double>();
 

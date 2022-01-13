@@ -4,25 +4,22 @@ import java.util.Collections;
 public abstract class ValueBasedRL {
     protected Double ALPHA;
     protected Double GAMMA;
-    protected Double EPSILON;
-    protected Double EPS_DECAY_RATE;
-    protected Integer typeEpsilonDecay;
+    // protected Double EPSILON;
+    // protected Double EPS_DECAY_RATE;
+    // protected Integer typeEpsilonDecay;
     protected Integer numActions;
 
     //constructor
-    protected ValueBasedRL(double alpha, double gamma, double epsilon, double epsDecayRate, Integer typeEpsilonDecay, Integer numActions) {
+    protected ValueBasedRL(double alpha, double gamma, Integer numActions) {
         this.GAMMA = gamma;
         this.ALPHA = alpha;
-        this.EPSILON = epsilon;
-        this.typeEpsilonDecay = typeEpsilonDecay;
-        this.EPS_DECAY_RATE = epsDecayRate;
         this.numActions = numActions;
     }
 
     protected void init(Environment env) {}
 
     protected void update (ArrayList<Domain> state, ArrayList<Domain> newState,
-                           Integer action, int reward) {}
+                           Integer action, Double reward) {}
 
     protected Double getValue(ArrayList<Domain> state, Integer action) {
         return -100.0;
@@ -49,11 +46,17 @@ public abstract class ValueBasedRL {
         return Collections.max(getValues(state));
     }
 
-    protected int epsilonGreedyPolicy(double epsilon, ArrayList<Domain> state) {
+    protected Integer epsilonGreedyPolicy(double epsilon, ArrayList<Domain> state) {
         if (Math.random() < epsilon)
             return (int) Math.floor(Math.random() * this.numActions);
         else {
             return getIdBestValue(state);
         }
     }
+
+
+    protected abstract void proc();
+    protected abstract void accessMemoryObjects();
+    // may be unnecessary
+    protected abstract void calculateActivation();
 }

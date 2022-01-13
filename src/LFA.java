@@ -4,16 +4,12 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class LFA extends ValueBasedRL  {
-
-    public LFA(double alpha, double gamma, double epsilon, double epsDecayRate,
-                                  Integer typeEpsilonDecay, Integer numActions) {
-        super(alpha, gamma, epsilon, epsDecayRate, typeEpsilonDecay, numActions);
-    }
     private LinkedHashMap<String, Double> weights = new LinkedHashMap<String, Double>();
-    private featuresExtractor extractor = new featuresExtractor();
+    private featuresExtractor extractor; // new featuresExtractor();
 
-    public LinkedHashMap<String, Double> getWeights() {
-        return this.weights;
+    public LFA(double alpha, double gamma, Integer numActions, featuresExtractor fe) {
+        super(alpha, gamma, numActions);
+        this.extractor = fe;
     }
 
     @Override
@@ -27,7 +23,7 @@ public class LFA extends ValueBasedRL  {
 
     @Override
     public void update(ArrayList<Domain> state, ArrayList<Domain> new_state,
-                       Integer action, int reward) {
+                       Integer action, Double reward) {
         LinkedHashMap<String, Double> gradient = this.extractor.getFeatures(state, action);
 
         Double new_q_val = this.getBestValue(new_state);
@@ -40,6 +36,10 @@ public class LFA extends ValueBasedRL  {
             Double w = this.ALPHA * (target - q_val) * gradient.get(f);
             this.weights.put(f, w);
         }
+    }
+
+    public LinkedHashMap<String, Double> getWeights() {
+        return this.weights;
     }
 
     @Override
@@ -62,5 +62,24 @@ public class LFA extends ValueBasedRL  {
             vals.add(getValue(state, a));
         }
         return vals;
+    }
+
+    @Override
+    protected void proc() {
+
+    }
+
+    @Override
+    protected void accessMemoryObjects() {
+        // MemoryObject moA, moB, moC...
+        // these memory objects are going to be basically the state, during training.
+        // moX = this.getInput("NAME_MO_TYPE")
+        // moY = this.getOutput("NAME_MO_TYPE")
+        // // moList.append(mo[N])
+    }
+
+    @Override
+    protected void calculateActivation() {
+
     }
 }

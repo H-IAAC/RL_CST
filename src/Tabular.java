@@ -7,11 +7,11 @@ public class Tabular extends ValueBasedRL {
     private HashMap<ArrayList<Domain>, ArrayList<Double>> qTable;
 
     //constructor
-    public Tabular(double alpha, double gamma, double epsilon, double epsDecayRate, int typeEpsilonDecay, int numActions) {
-        super(alpha, gamma, epsilon, epsDecayRate, typeEpsilonDecay, numActions);
+    public Tabular(double alpha, double gamma, Integer numActions) {
+        super(alpha, gamma, numActions);
     }
 
-    protected void initQTable(ArrayList<Domain> state) {
+    protected void initQValue(ArrayList<Domain> state) {
         ArrayList<Double> initVals = new ArrayList<Double>();
         for (int i = 0; i < numActions; i++)
             initVals.add(Math.random());
@@ -23,7 +23,7 @@ public class Tabular extends ValueBasedRL {
     protected Double getValue(ArrayList<Domain> state, Integer idAction) {
         ArrayList<Double> val = qTable.get(state);
         if (val == null)
-            initQTable(state);
+            initQValue(state);
 
         return qTable.get(state).get(idAction);
     }
@@ -34,7 +34,22 @@ public class Tabular extends ValueBasedRL {
     }
 
     @Override
-    protected void update (ArrayList<Domain> state, ArrayList<Domain> newState, Integer idAction, int reward) {
+    protected void proc() {
+
+    }
+
+    @Override
+    protected void accessMemoryObjects() {
+
+    }
+
+    @Override
+    protected void calculateActivation() {
+
+    }
+
+    @Override
+    protected void update (ArrayList<Domain> state, ArrayList<Domain> newState, Integer idAction, Double reward) {
         Double maxFutureQ = this.getBestValue(newState);
         ArrayList<Double> qValues = this.getValues(state);
         Double qVal = qValues.get(idAction);
